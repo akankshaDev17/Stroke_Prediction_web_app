@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroke Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --input-focus: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 40px;
+            margin: 20px auto;
+            max-width: 900px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-section h2 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .form-section-title {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .form-floating {
+            margin-bottom: 10px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: var(--input-focus);
+        }
+
+        .form-floating > label {
+            color: #6b7280;
+        }
+
+        .btn-predict {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .icon-wrapper {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .icon-wrapper svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+        .brain{
+            width:40px;
+            height: 30px;
+            fill:#f093fb
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+                margin: 10px;
+            }
+
+            .header-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .form-section-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-card {
+                padding: 20px;
+            }
+
+            .info-box {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <div class="header-section">
+                <!-- <div class="icon-wrapper mx-auto "> -->
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg> -->
+                
+                <!-- </div> -->
+                <h2><span class="brain">🧠</span> Stroke Prediction System</h2>
+                <p class="text-muted">AI-Powered Health Risk Assessment</p>
+            </div>
+
+            <div class="info-box">
+                <strong>ℹ️ Important Information:</strong><br>
+                Stroke is the second leading cause of death globally, responsible for approximately 11% of total deaths (WHO). 
+                Stroke is a medical condition characterized by disrupted blood supply to the brain, leading to cellular death. 
+                Signs and symptoms may include inability to move or feel on one side of the body, problems understanding 
+                or speaking, dizziness, or loss of vision to one side.
+            </div>
+
+            <form method="POST" class="row g-3">
+                <h4 class="form-section-title">📋 Patient Information</h4>
+                
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" class="form-control" name="age" id="age" min="1" max="100" required>
+                        <label for="age">Age (years)</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="gender" id="gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <label for="gender">Gender</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" step="0.01" class="form-control" name="avg_glucose_level" id="avg_glucose_level" min="40.0" max="300.0" required>
+                        <label for="avg_glucose_level">Average Glucose Level (mg/dL)</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" step="0.1" class="form-control" name="bmi" id="bmi" min="10" max="100" required>
+                        <label for="bmi">BMI (Body Mass Index)</label>
+                    </div>
+                </div>
+
+                <h4 class="form-section-title mt-4">🏥 Medical History</h4>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="hypertension" id="hypertension" required>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <label for="hypertension">Hypertension</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="heart_disease" id="heart_disease" required>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <label for="heart_disease">Heart Disease</label>
+                    </div>
+                </div>
+
+                <h4 class="form-section-title mt-4">👤 Lifestyle Information</h4>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="ever_married" id="ever_married" required>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <label for="ever_married">Ever Married</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="residence_type" id="residence_type" required>
+                            <option value="Urban">Urban</option>
+                            <option value="Rural">Rural</option>
+                        </select>
+                        <label for="residence_type">Residence Type</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="smoking_status" id="smoking_status" required>
+                            <option value="Never Smoked">Never Smoked</option>
+                            <option value="Formerly Smoked">Formerly Smoked</option>
+                            <option value="Smokes">Smokes</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                        <label for="smoking_status">Smoking Status</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" name="work_type" id="work_type" required>
+                            <option value="Private">Private</option>
+                            <option value="Self-employed">Self-employed</option>
+                            <option value="Government job">Government job</option>
+                            <option value="Children">Children</option>
+                            <option value="Never Worked">Never Worked</option>
+                        </select>
+                        <label for="work_type">Work Type</label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-predict w-100">
+                         Predict Stroke Risk
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
